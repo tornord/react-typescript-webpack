@@ -1,16 +1,23 @@
 @import url("https://fonts.googleapis.com/css?family=Montserrat:400,700|Roboto:100,300,400");
 
-// @font-face {
-//   font-family: "Gotham Rounded-Book";
-//   src: url("fonts/GothamRounded-Book.woff") format("woff");
-//   font-weight: normal;
-//   font-style: normal;
-// }
+@font-face {
+  font-family: "GothamRounded-Book";
+  src: url("./fonts/GothamRounded-Book.woff") format("woff");
+  font-weight: 500;
+  font-style: normal;
+}
 
 @font-face {
   font-family: "BentonSansRegular";
-  src: url("fonts/BentonSansRegular.woff2") format("woff2");
-  font-weight: normal;
+  src: url("./fonts/BentonSansRegular.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "KaTeX_Caligraphic-Regular";
+  src: url("./fonts/KaTeX_Caligraphic-Regular.woff2") format("woff2");
+  font-weight: 500;
   font-style: normal;
 }
 

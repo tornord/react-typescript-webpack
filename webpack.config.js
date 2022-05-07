@@ -69,20 +69,21 @@ module.exports = (env) => {
         },
         {
           test: /\.(woff|woff2)$/,
-          use: [
-            {
-              loader: "file-loader",
-              options: {
-                name: "fonts/[hash].[ext]",
-                mimetype: "font/woff",
-              },
-            },
-          ],
+          type: "asset/resource",
+          // use: [
+          //   {
+          //     loader: "file-loader",
+          //     options: {
+          //       name: "fonts/[hash].[ext]",
+          //       mimetype: "font/woff",
+          //     },
+          //   },
+          // ],
         },
       ],
     },
     output: {
-      clean: true,
+      clean: env.production ? true : false,
       filename: `${filename}.js`,
       chunkFilename: `${filename}.js`,
       path: path.resolve(__dirname, env.production ? "dist" : "demo"),
