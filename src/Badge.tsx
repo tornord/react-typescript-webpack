@@ -6,7 +6,7 @@ interface BadgeProps {
   value: string;
 }
 
-export default function Badge({ value }: BadgeProps) {
+export function Badge({ value }: BadgeProps) {
   return (
     <div className={`badge ${!value ? "badge--none" : ""} `}>
       <h4 className="heavy">{value || 0}</h4>

@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
-import Badge from "./Badge";
+import { Badge } from "./Badge";
 import "./index.scss";
 
 var rootElement = document.getElementById("root");
@@ -15,9 +15,9 @@ if (rootElement) {
   );
 }
 
-exports = {
+const exports = {
   React,
   ReactDOM,
   Badge,
 };
-Object.keys(exports).forEach((d: any) => (window[d] = exports[d]));
+Object.keys(exports).forEach((d: any) => (window[d] = (exports as any)[d]));

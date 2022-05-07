@@ -1,19 +1,18 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const webpack = require("webpack");
-const nodeExternals = require("webpack-node-externals");
+// const pkg = require("./package.json");
 
 module.exports = (env) => {
-  const filename = env.production ? "index-library.tsx" : "index-demo.tsx";
-  console.log(env, nodeExternals());
+  const filename = env.production ? "index-library" : "index-demo";
+  console.log(env, filename);
   return {
     mode: env.production ? "production" : "development",
     devtool: "inline-source-map",
     entry: {
-      app: path.join(__dirname, "src", filename),
+      app: path.join(__dirname, "src", `${filename}.tsx`),
     },
     target: env.production ? "node" : "web",
-    // externalsPresets: { node: true },
     resolve: {
       extensions: [".ts", ".tsx", ".js"],
     },
@@ -83,18 +82,19 @@ module.exports = (env) => {
       ],
     },
     output: {
-      filename: filename,
-      chunkFilename: filename,
+      clean: true,
+      filename: `${filename}.js`,
+      chunkFilename: `${filename}.js`,
       path: path.resolve(__dirname, env.production ? "dist" : "demo"),
+      ...(env.production ? { library: { type: "commonjs" } } : {}),
     },
     plugins: [
       new HtmlWebpackPlugin({ template: path.join(__dirname, "src", "index.html") }),
       new webpack.ProvidePlugin({ process: "process/browser" }),
     ],
-    optimization: {
-      // minimize: true,
-      usedExports: true,
+    devServer: {
+      static: path.resolve(__dirname, "./demo"),
     },
-    externals: env.production ? [nodeExternals()] : [],
+    ...(env.production ? { externals: { react: "commonjs react" } } : {}),
   };
 };
