@@ -4,12 +4,13 @@ const webpack = require("webpack");
 const nodeExternals = require("webpack-node-externals");
 
 module.exports = (env) => {
-  console.log(env, env.production ? "node" : "web");
+  const filename = env.production ? "index-library.tsx" : "index-demo.tsx";
+  console.log(env, nodeExternals());
   return {
     mode: env.production ? "production" : "development",
     devtool: "inline-source-map",
     entry: {
-      app: path.join(__dirname, "src", env.production ? "index-library.tsx" : "index-demo.tsx"),
+      app: path.join(__dirname, "src", filename),
     },
     target: env.production ? "node" : "web",
     // externalsPresets: { node: true },
@@ -82,8 +83,8 @@ module.exports = (env) => {
       ],
     },
     output: {
-      filename: "index.js",
-      chunkFilename: "index.js",
+      filename: filename,
+      chunkFilename: filename,
       path: path.resolve(__dirname, env.production ? "dist" : "demo"),
     },
     plugins: [
@@ -94,6 +95,6 @@ module.exports = (env) => {
       // minimize: true,
       usedExports: true,
     },
-    // externals: [nodeExternals()],
+    externals: env.production ? [nodeExternals()] : [],
   };
 };

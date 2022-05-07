@@ -1,16 +1,16 @@
 {
   "name": "react-typescript-webpack",
-  "version": "1.0.4",
+  "version": "1.0.6",
   "description": "",
   "files": [
     "dist",
     "README.md"
   ],
-  "main": "dist/index.js",
+  "main": "dist/index-library.js",
   "scripts": {
     "start": "npx webpack serve",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack --config webpack.config.js --env production"
+    "build": "npm version patch --no-git-tag-version && npx webpack --config webpack.config.js --env production && npm pack"
   },
   "keywords": [],
   "author": "",
