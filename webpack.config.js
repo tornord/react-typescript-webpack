@@ -1,34 +1,99 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const webpack = require("webpack");
+const nodeExternals = require("webpack-node-externals");
 
 module.exports = (env) => {
-  console.log(env);
+  console.log(env, env.production ? "node" : "web");
   return {
-    mode: "none",
+    mode: env.production ? "production" : "development",
+    devtool: "inline-source-map",
     entry: {
-      app: path.join(__dirname, "src", "index.tsx"),
+      app: path.join(__dirname, "src", env.production ? "index-library.tsx" : "index-demo.tsx"),
     },
-    target: "web",
+    target: env.production ? "node" : "web",
+    // externalsPresets: { node: true },
     resolve: {
       extensions: [".ts", ".tsx", ".js"],
     },
     module: {
       rules: [
         {
+          test: /\.(txt|csv)$/i,
+          use: "raw-loader",
+        },
+        {
           test: /\.tsx?$/,
           use: "ts-loader",
           exclude: "/node_modules/",
         },
+        {
+          test: /\.s[ac]ss$/i,
+          use: [
+            "style-loader", // Creates `style` nodes from JS strings
+            {
+              loader: "css-loader",
+              options: {
+                sourceMap: true, // <-- !!IMPORTANT!!
+              },
+            },
+            // "resolve-url-loader",
+            // {
+            //   loader: "postcss-loader",
+            //   options: {
+            //     sourceMap: true, // <-- !!IMPORTANT!!
+            //   },
+            // },
+            // Compiles Sass to CSS
+            {
+              loader: "sass-loader",
+              options: {
+                sourceMap: true, // <-- !!IMPORTANT!!
+              },
+            },
+          ],
+        },
+        {
+          test: /\.(gif|png|jpe?g|svg)$/i,
+          exclude: /node_modules/,
+          use: [
+            "file-loader",
+            {
+              loader: "image-webpack-loader",
+              options: {
+                bypassOnDebug: true, // webpack@1.x
+                disable: true, // webpack@2.x and newer
+              },
+            },
+          ],
+        },
+        {
+          test: /\.(woff|woff2)$/,
+          use: [
+            {
+              loader: "file-loader",
+              options: {
+                name: "fonts/[hash].[ext]",
+                mimetype: "font/woff",
+              },
+            },
+          ],
+        },
       ],
     },
     output: {
-      filename: "[name].js",
-      path: path.resolve(__dirname, "dist"),
+      filename: "index.js",
+      chunkFilename: "index.js",
+      path: path.resolve(__dirname, env.production ? "dist" : "demo"),
     },
     plugins: [
       new HtmlWebpackPlugin({ template: path.join(__dirname, "src", "index.html") }),
       new webpack.ProvidePlugin({ process: "process/browser" }),
     ],
+    optimization: {
+      // minimize: true,
+      usedExports: true,
+    },
+    // externals: [nodeExternals()],
   };
 };
