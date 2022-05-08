@@ -1,6 +1,5 @@
 import React from "react";
-import "./Badge.scss";
-// import "./fonts/GothamRounded-Book.woff";
+import "./Badge.css";
 
 interface BadgeProps {
   value: string;

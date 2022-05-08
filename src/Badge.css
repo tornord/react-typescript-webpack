@@ -1,0 +1,12 @@
+.badge {
+  padding: 8px;
+  background: aliceblue;
+  display: inline-block;
+  border-radius: 4px;
+  font-family: "KaTeX_Caligraphic-Regular";
+}
+
+.badge h4 {
+  margin: 0;
+  font-size: 32px;
+}

@@ -1,7 +1,9 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const webpack = require("webpack");
+// const webpack = require("webpack");
 // const pkg = require("./package.json");
+// const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const NodePolyfillPlugin = require("node-polyfill-webpack-plugin");
 
 module.exports = (env) => {
   const filename = env.production ? "index-library" : "index-demo";
@@ -15,44 +17,25 @@ module.exports = (env) => {
     target: env.production ? "node" : "web",
     resolve: {
       extensions: [".ts", ".tsx", ".js"],
+      fallback: {
+        url: require.resolve("url/"),
+      },
     },
     module: {
       rules: [
-        {
-          test: /\.(txt|csv)$/i,
-          use: "raw-loader",
-        },
         {
           test: /\.tsx?$/,
           use: "ts-loader",
           exclude: "/node_modules/",
         },
         {
-          test: /\.s[ac]ss$/i,
-          use: [
-            "style-loader", // Creates `style` nodes from JS strings
-            {
-              loader: "css-loader",
-              options: {
-                sourceMap: true, // <-- !!IMPORTANT!!
-              },
-            },
-            // "resolve-url-loader",
-            // {
-            //   loader: "postcss-loader",
-            //   options: {
-            //     sourceMap: true, // <-- !!IMPORTANT!!
-            //   },
-            // },
-            // Compiles Sass to CSS
-            {
-              loader: "sass-loader",
-              options: {
-                sourceMap: true, // <-- !!IMPORTANT!!
-              },
-            },
-          ],
+          test: /\.css$/i,
+          use: ["style-loader", "css-loader"],
         },
+        // {
+        //   test: /\.s[ac]ss$/i,
+        //   use: ["style-loader", "css-loader" /*"postcss-loader" ,"resolve-url-loader"*/, "sass-loader"],
+        // },
         {
           test: /\.(gif|png|jpe?g|svg)$/i,
           exclude: /node_modules/,
@@ -70,28 +53,36 @@ module.exports = (env) => {
         {
           test: /\.(woff|woff2)$/,
           type: "asset/resource",
-          // use: [
-          //   {
-          //     loader: "file-loader",
-          //     options: {
-          //       name: "fonts/[hash].[ext]",
-          //       mimetype: "font/woff",
-          //     },
-          //   },
-          // ],
+          generator: {
+            filename: "./fonts/[name][ext]",
+          },
         },
+        // {
+        //   test: /\.(woff|woff2)$/,
+        //   use: {
+        //     loader: "url-loader",
+        //     options: {
+        //       limit: 50000,
+        //       mimetype: "font-woff",
+        //       name: "./fonts/[name].[ext]", // Output below ./fonts
+        //       publicPath: "../", // Take the directory into account
+        //     },
+        //   },
+        // },
       ],
     },
     output: {
       clean: env.production ? true : false,
       filename: `${filename}.js`,
-      chunkFilename: `${filename}.js`,
+      // chunkFilename: `${filename}.js`,
       path: path.resolve(__dirname, env.production ? "dist" : "demo"),
       ...(env.production ? { library: { type: "commonjs" } } : {}),
     },
     plugins: [
       new HtmlWebpackPlugin({ template: path.join(__dirname, "src", "index.html") }),
-      new webpack.ProvidePlugin({ process: "process/browser" }),
+      // new NodePolyfillPlugin(),
+      // new webpack.ProvidePlugin({ process: "process/browser" }),
+      // new MiniCssExtractPlugin(),
     ],
     devServer: {
       static: path.resolve(__dirname, "./demo"),

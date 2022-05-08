@@ -1,8 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App";
 import { Badge } from "./Badge";
-import "./index.scss";
+import "./fonts.css";
+import "./index.css";
 
 var rootElement = document.getElementById("root");
 
@@ -10,7 +10,8 @@ if (rootElement) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
     <React.StrictMode>
-      <App />
+      <h1>My react component</h1>
+      <Badge value="ABC" />
     </React.StrictMode>
   );
 }
