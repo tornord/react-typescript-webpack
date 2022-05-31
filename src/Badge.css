@@ -3,7 +3,8 @@
   background: aliceblue;
   display: inline-block;
   border-radius: 4px;
-  font-family: "KaTeX_Caligraphic-Regular";
+  /* font-family: "KaTeX_Caligraphic-Regular"; */
+  font-family: "Montserrat";
 }
 
 .badge h4 {
